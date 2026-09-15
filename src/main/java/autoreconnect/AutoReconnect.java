@@ -157,7 +157,14 @@ public class AutoReconnect implements ClientModInitializer {
                 return;
             }
 
-            sendMessage(player, messages.next());
+            // Grab the string on the background thread
+            String messageToSend = messages.next();
+
+            // Push the actual sending logic to the main Minecraft thread
+            MinecraftClient.getInstance().execute(() -> {
+                sendMessage(player, messageToSend);
+            });
+
         }, delay, delay, TimeUnit.MILLISECONDS);
     }
 
