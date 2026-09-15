@@ -22,5 +22,14 @@
   "text.autoreconnect.config.tooltip.option.automessages.delay": "Delay between messages and before the first one in milliseconds",
 
   "text.autoreconnect.config.error.empty_list": "Empty list!",
-  "text.autoreconnect.config.error.empty_string": "Empty text field!"
+  "text.autoreconnect.config.error.empty_string": "Empty text field!",
+
+  "text.autoreconnect.config.option.automessages.enableRandomFacts": "Enable Random Facts",
+  "text.autoreconnect.config.tooltip.option.automessages.enableRandomFacts": "If true, overrides normal messages to send a random fact in chat instead.",
+
+  "text.autoreconnect.config.option.automessages.factPrefix": "Fact Prefix",
+  "text.autoreconnect.config.tooltip.option.automessages.factPrefix": "The text placed before the random fact (e.g., 'Did you know: ').",
+
+  "text.autoreconnect.config.option.automessages.facts": "Random Facts List",
+  "text.autoreconnect.config.tooltip.option.automessages.facts": "Add, remove, or edit the pool of facts to be chosen from."
 }

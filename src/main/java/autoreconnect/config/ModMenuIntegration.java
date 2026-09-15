@@ -22,80 +22,108 @@ public class ModMenuIntegration implements ModMenuApi {
 
     private static Screen createConfigScreen(Screen parent) {
         ConfigBuilder builder = ConfigBuilder.create()
-            .setParentScreen(parent)
-            .setTitle(Text.translatable("text.autoreconnect.config.title"));
+                .setParentScreen(parent)
+                .setTitle(Text.translatable("text.autoreconnect.config.title"));
         ConfigEntryBuilder entryBuilder = builder.entryBuilder();
         builder.getOrCreateCategory(Text.empty()) // text will be ignored since it's the only category
-            .addEntry(entryBuilder.startIntList(
-                    Text.translatable("text.autoreconnect.config.option.delays"),
-                    AutoReconnectConfig.getInstance().delays)
-                .setCreateNewInstance(list -> new IntegerListListEntry.IntegerListCell(AutoReconnectConfig.defaultDelay, list))
-                .setInsertInFront(false)
-                .setMin(1)
-                .setExpanded(true)
-                .setDefaultValue(AutoReconnectConfig.defaultDelays)
-                .setSaveConsumer(delays -> AutoReconnectConfig.getInstance().delays = delays)
-                .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.delays"))
-                .build())
-            .addEntry(entryBuilder.startBooleanToggle(
-                    Text.translatable("text.autoreconnect.config.option.infinite"),
-                    AutoReconnectConfig.getInstance().infinite)
-                .setDefaultValue(AutoReconnectConfig.defaultInfinite)
-                .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.infinite"))
-                .setSaveConsumer(infinite -> AutoReconnectConfig.getInstance().infinite = infinite)
-                .build())
-            .addEntry(new NestedListListEntry<AutoMessages, MultiElementListEntry<AutoMessages>>(
-                Text.translatable("text.autoreconnect.config.option.automessages"),
-                AutoReconnectConfig.getInstance().autoMessages,
-                true,
-                () -> Optional.of(new Text[]{Text.translatable("text.autoreconnect.config.tooltip.option.automessages")}),
-                list -> AutoReconnectConfig.getInstance().autoMessages = list,
-                () -> AutoReconnectConfig.defaultAutoMessages,
-                entryBuilder.getResetButtonKey(),
-                true,
-                false,
-                (autoMessages, listListEntry) -> createAutoMessagesEntry(entryBuilder, autoMessages != null ? autoMessages : new AutoMessages())));
+                .addEntry(entryBuilder.startIntList(
+                                Text.translatable("text.autoreconnect.config.option.delays"),
+                                AutoReconnectConfig.getInstance().delays)
+                        .setCreateNewInstance(list -> new IntegerListListEntry.IntegerListCell(AutoReconnectConfig.defaultDelay, list))
+                        .setInsertInFront(false)
+                        .setMin(1)
+                        .setExpanded(true)
+                        .setDefaultValue(AutoReconnectConfig.defaultDelays)
+                        .setSaveConsumer(delays -> AutoReconnectConfig.getInstance().delays = delays)
+                        .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.delays"))
+                        .build())
+                .addEntry(entryBuilder.startBooleanToggle(
+                                Text.translatable("text.autoreconnect.config.option.infinite"),
+                                AutoReconnectConfig.getInstance().infinite)
+                        .setDefaultValue(AutoReconnectConfig.defaultInfinite)
+                        .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.infinite"))
+                        .setSaveConsumer(infinite -> AutoReconnectConfig.getInstance().infinite = infinite)
+                        .build())
+                .addEntry(new NestedListListEntry<AutoMessages, MultiElementListEntry<AutoMessages>>(
+                        Text.translatable("text.autoreconnect.config.option.automessages"),
+                        AutoReconnectConfig.getInstance().autoMessages,
+                        true,
+                        () -> Optional.of(new Text[]{Text.translatable("text.autoreconnect.config.tooltip.option.automessages")}),
+                        list -> AutoReconnectConfig.getInstance().autoMessages = list,
+                        () -> AutoReconnectConfig.defaultAutoMessages,
+                        entryBuilder.getResetButtonKey(),
+                        true,
+                        false,
+                        (autoMessages, listListEntry) -> createAutoMessagesEntry(entryBuilder, autoMessages != null ? autoMessages : new AutoMessages())));
         return builder
-            .setSavingRunnable(AutoReconnectConfig.getInstance()::save)
-            .build();
+                .setSavingRunnable(AutoReconnectConfig.getInstance()::save)
+                .build();
     }
 
     private static MultiElementListEntry<AutoMessages> createAutoMessagesEntry(ConfigEntryBuilder entryBuilder, AutoMessages autoMessages) {
         var tmp = new MultiElementListEntry<>(
-            Text.translatable("text.autoreconnect.config.option.automessages.instance"),
-            autoMessages,
-            Arrays.asList(
-                entryBuilder.startTextField(
-                        Text.translatable("text.autoreconnect.config.option.automessages.name"),
-                        autoMessages.name)
-                    .setErrorSupplier(ModMenuIntegration::emptyStringErrorSupplier)
-                    .setDefaultValue(AutoMessages.defaultName)
-                    .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.name"))
-                    .setSaveConsumer(name -> autoMessages.name = name)
-                    .build(),
-                entryBuilder.startStrList(
-                        Text.translatable("text.autoreconnect.config.option.automessages.messages"),
-                        autoMessages.messages)
-                    .setErrorSupplier(ModMenuIntegration::emptyListErrorSupplier)
-                    .setCellErrorSupplier(ModMenuIntegration::emptyStringErrorSupplier)
-                    .setDefaultValue(AutoMessages.defaultMessages)
-                    .setInsertInFront(false)
-                    .setExpanded(true)
-                    .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.messages"))
-                    .setSaveConsumer(messages -> autoMessages.messages = messages)
-                    .build(),
-                entryBuilder.startIntField(
-                        Text.translatable("text.autoreconnect.config.option.automessages.delay"),
-                        autoMessages.delay)
-                    .setDefaultValue(AutoMessages.defaultDelay)
-                    .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.delay"))
-                    .setMin(1)
-                    .setSaveConsumer(delay -> autoMessages.delay = delay)
-                    .build()
-            ),
-            true);
+                Text.translatable("text.autoreconnect.config.option.automessages.instance"),
+                autoMessages,
+                Arrays.asList(
+                        entryBuilder.startTextField(
+                                        Text.translatable("text.autoreconnect.config.option.automessages.name"),
+                                        autoMessages.name)
+                                .setErrorSupplier(ModMenuIntegration::emptyStringErrorSupplier)
+                                .setDefaultValue(AutoMessages.defaultName)
+                                .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.name"))
+                                .setSaveConsumer(name -> autoMessages.name = name)
+                                .build(),
+                        entryBuilder.startStrList(
+                                        Text.translatable("text.autoreconnect.config.option.automessages.messages"),
+                                        autoMessages.messages)
+                                .setErrorSupplier(ModMenuIntegration::emptyListErrorSupplier)
+                                .setCellErrorSupplier(ModMenuIntegration::emptyStringErrorSupplier)
+                                .setDefaultValue(AutoMessages.defaultMessages)
+                                .setInsertInFront(false)
+                                .setExpanded(false) // Recommend keeping normal messages collapsed to save screen space
+                                .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.messages"))
+                                .setSaveConsumer(messages -> autoMessages.messages = messages)
+                                .build(),
+                        entryBuilder.startIntField(
+                                        Text.translatable("text.autoreconnect.config.option.automessages.delay"),
+                                        autoMessages.delay)
+                                .setDefaultValue(AutoMessages.defaultDelay)
+                                .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.delay"))
+                                .setMin(1)
+                                .setSaveConsumer(delay -> autoMessages.delay = delay)
+                                .build(),
+
+                        // --- NEW ENTRIES FOR RANDOM FACTS ---
+
+                        entryBuilder.startBooleanToggle(
+                                        Text.translatable("text.autoreconnect.config.option.automessages.enableRandomFacts"),
+                                        autoMessages.enableRandomFacts)
+                                .setDefaultValue(AutoMessages.defaultEnableRandomFacts)
+                                .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.enableRandomFacts"))
+                                .setSaveConsumer(enabled -> autoMessages.enableRandomFacts = enabled)
+                                .build(),
+                        entryBuilder.startTextField(
+                                        Text.translatable("text.autoreconnect.config.option.automessages.factPrefix"),
+                                        autoMessages.factPrefix)
+                                .setDefaultValue(AutoMessages.defaultFactPrefix)
+                                .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.factPrefix"))
+                                .setSaveConsumer(prefix -> autoMessages.factPrefix = prefix)
+                                .build(),
+                        entryBuilder.startStrList(
+                                        Text.translatable("text.autoreconnect.config.option.automessages.facts"),
+                                        autoMessages.facts)
+                                .setErrorSupplier(ModMenuIntegration::emptyListErrorSupplier)
+                                .setCellErrorSupplier(ModMenuIntegration::emptyStringErrorSupplier)
+                                .setDefaultValue(AutoMessages.defaultFacts)
+                                .setInsertInFront(false)
+                                .setExpanded(false) // Defaulting to collapsed so the UI isn't massive initially
+                                .setTooltip(Text.translatable("text.autoreconnect.config.tooltip.option.automessages.facts"))
+                                .setSaveConsumer(facts -> autoMessages.facts = facts)
+                                .build()
+                ),
+                true);
         tmp.setTooltipSupplier(() -> Optional.of(new Text[] {
-            Text.translatable("text.autoreconnect.config.tooltip.option.automessages.instance")
+                Text.translatable("text.autoreconnect.config.tooltip.option.automessages.instance")
         }));
         return tmp;
     }
