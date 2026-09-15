@@ -76,8 +76,6 @@ public class ModMenuIntegration implements ModMenuApi {
                         entryBuilder.startStrList(
                                         Text.translatable("text.autoreconnect.config.option.automessages.messages"),
                                         autoMessages.messages)
-                                .setErrorSupplier(ModMenuIntegration::emptyListErrorSupplier)
-                                .setCellErrorSupplier(ModMenuIntegration::emptyStringErrorSupplier)
                                 .setDefaultValue(AutoMessages.defaultMessages)
                                 .setInsertInFront(false)
                                 .setExpanded(false) // Recommend keeping normal messages collapsed to save screen space
@@ -112,8 +110,6 @@ public class ModMenuIntegration implements ModMenuApi {
                         entryBuilder.startStrList(
                                         Text.translatable("text.autoreconnect.config.option.automessages.facts"),
                                         autoMessages.facts)
-                                .setErrorSupplier(ModMenuIntegration::emptyListErrorSupplier)
-                                .setCellErrorSupplier(ModMenuIntegration::emptyStringErrorSupplier)
                                 .setDefaultValue(AutoMessages.defaultFacts)
                                 .setInsertInFront(false)
                                 .setExpanded(false) // Defaulting to collapsed so the UI isn't massive initially
