@@ -102,18 +102,29 @@ public class AutoReconnect implements ClientModInitializer {
     }
 
     public void onGameJoined() {
-        if (reconnectStrategy == null) return; // should not happen
-        if (!reconnectStrategy.isAttempting()) return; // manual (re)connect
+        if (reconnectStrategy == null) return;
+        if (!reconnectStrategy.isAttempting()) return;
 
         reconnectStrategy.resetAttempts();
 
-        // Send automatic messages if configured for the current context
-        getConfig().getAutoMessagesForName(reconnectStrategy.getName()).ifPresent(
-            autoMessages -> sendAutomatedMessages(
-                MinecraftClient.getInstance().player,
-                autoMessages.getMessages(),
-                autoMessages.getDelay()
-            )
+        String currentServerName = reconnectStrategy.getName();
+        LogUtils.getLogger().info("[DEBUG] Successfully reconnected! The mod sees this server's name as: '" + currentServerName + "'");
+
+        Optional<AutoReconnectConfig.AutoMessages> match = getConfig().getAutoMessagesForName(currentServerName);
+
+        if (match.isEmpty()) {
+            LogUtils.getLogger().info("[DEBUG] Failed! No AutoMessages config profile matched the name '" + currentServerName + "'");
+        }
+
+        match.ifPresent(
+                autoMessages -> {
+                    LogUtils.getLogger().info("[DEBUG] Config matched! Sending messages in " + autoMessages.getDelay() + "ms...");
+                    sendAutomatedMessages(
+                            MinecraftClient.getInstance().player,
+                            autoMessages.getMessages(),
+                            autoMessages.getDelay()
+                    );
+                }
         );
     }
 
@@ -159,6 +170,7 @@ public class AutoReconnect implements ClientModInitializer {
 
             // Grab the string on the background thread
             String messageToSend = messages.next();
+            LogUtils.getLogger().info("[DEBUG] Firing message to chat: " + messageToSend);
 
             // Push the actual sending logic to the main Minecraft thread
             MinecraftClient.getInstance().execute(() -> {
